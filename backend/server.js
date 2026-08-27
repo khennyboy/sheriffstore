@@ -11,12 +11,13 @@ const PORT = process.env.PORT || 8000;
 const __dirname = path.resolve();
 app.use(express.json()); // allow us to accept JSON data in the body
 
-if (process.env.NODE_ENV == "production") {
+if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "frontend/dist")));
+
+  app.get("*", (_, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
 }
-app.get("*", (_, res) => {
-  res.sendFile(path.resolve(__dirname, "frontend", "dist"));
-});
 
 app.use("/api/products", productRoutes);
 
