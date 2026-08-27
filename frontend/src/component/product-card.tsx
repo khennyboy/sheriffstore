@@ -54,7 +54,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
       _hover={{ transform: "translateY(-3px)", shadow: "lg" }}
     >
       <AspectRatio ratio={4 / 3}>
-        <Image src={product.image} alt={product.name} objectFit={"cover"} />
+        <Image
+          src={product.image}
+          alt={product.name}
+          loading="lazy"
+          objectFit={"cover"}
+        />
       </AspectRatio>
 
       <Box p={4}>
