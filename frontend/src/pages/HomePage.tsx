@@ -3,41 +3,55 @@ import {
   Center,
   Container,
   Heading,
+  HStack,
   SimpleGrid,
   Spinner,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import { LuPackageOpen } from "react-icons/lu";
+import { Link } from "react-router-dom";
 import ProductCard from "../component/product-card";
 import { useProductStore } from "../store/product-store";
-import { useShallow } from "zustand/shallow";
+
+import { IoWarning } from "react-icons/io5";
 import { useColorModeValue } from "../components/ui/color-mode";
+import useGetProducts from "../hooks/handleGetProducts";
 
 const HomePage = () => {
-  const { fetchProducts, products } = useProductStore(
-    useShallow((state) => ({
-      fetchProducts: state.fetchProducts,
-      products: state.products,
-    })),
-  );
-  const [isLoading, setIsLoading] = useState(true);
+  const products = useProductStore((state) => state.products);
+
   const subTextColor = useColorModeValue("gray.500", "gray.400");
   const emptyBg = useColorModeValue("white", "gray.900");
   const emptyBorder = useColorModeValue("gray.200", "gray.800");
+  const { getProducts, isLoading, error } = useGetProducts();
 
   useEffect(() => {
-    const loadProducts = async () => {
-      setIsLoading(true);
-      await fetchProducts();
-      setIsLoading(false);
-    };
-    loadProducts();
+    getProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  
+  console.log(error);
+  if (error) {
+    return (
+      <Container maxW={"480px"} py={12}>
+        <Box
+          bg={emptyBg}
+          border="1px solid"
+          borderColor={"red.500"}
+          rounded={"lg"}
+          py={3}
+          px={2}
+        >
+          <HStack gap={0.5} align={"center"} justify={"center"}>
+            <IoWarning color="red" />
+            <Text>{error}</Text>
+          </HStack>
+        </Box>
+      </Container>
+    );
+  }
   return (
     <Container maxW={"1140px"} py={12}>
       <VStack gap={10} align={"stretch"}>

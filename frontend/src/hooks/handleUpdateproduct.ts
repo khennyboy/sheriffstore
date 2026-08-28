@@ -23,7 +23,7 @@ const useUpdateProduct = () => {
 
         if (success) setIsOpen(false);
 
-        return { success, message };
+        return null;
     };
 
     return { editProduct, isLoading };

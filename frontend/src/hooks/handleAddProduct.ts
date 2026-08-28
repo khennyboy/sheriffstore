@@ -20,7 +20,7 @@ const useAddProduct = () => {
             closable: true,
         });
 
-        return { success, message };
+        return null;
     };
 
     return { addProduct, isLoading };
