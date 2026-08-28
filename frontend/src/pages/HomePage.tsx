@@ -28,10 +28,12 @@ const HomePage = () => {
   const { getProducts, isLoading, error } = useGetProducts();
 
   useEffect(() => {
-    getProducts();
+    if (products.length === 0) {
+      getProducts();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   console.log(error);
   if (error) {
     return (
