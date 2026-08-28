@@ -34,11 +34,17 @@ const HomePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(error);
   if (error) {
     return (
-      <Container maxW={"480px"} py={12}>
+      <Container
+        maxW={"480px"}
+        py={12}
+        minH={"dvh"}
+        display={"flex"}
+        alignItems={"center"}
+      >
         <Box
+          w={"full"}
           bg={emptyBg}
           border="1px solid"
           borderColor={"red.500"}
@@ -55,7 +61,7 @@ const HomePage = () => {
     );
   }
   return (
-    <Container maxW={"1140px"} py={12}>
+    <Container maxW={"1140px"} py={12} minH={"dvh"}>
       <VStack gap={10} align={"stretch"}>
         <VStack gap={1} align={"start"}>
           <Heading
