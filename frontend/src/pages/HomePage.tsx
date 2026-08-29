@@ -9,30 +9,19 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
 import { LuPackageOpen } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import ProductCard from "../component/product-card";
-import { useProductStore } from "../store/product-store";
 
 import { IoWarning } from "react-icons/io5";
 import { useColorModeValue } from "../components/ui/color-mode";
 import useGetProducts from "../hooks/handleGetProducts";
 
 const HomePage = () => {
-  const products = useProductStore((state) => state.products);
-
   const subTextColor = useColorModeValue("gray.500", "gray.400");
   const emptyBg = useColorModeValue("white", "gray.900");
   const emptyBorder = useColorModeValue("gray.200", "gray.800");
-  const { getProducts, isLoading, error } = useGetProducts();
-
-  useEffect(() => {
-    if (products.length === 0) {
-      getProducts();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { isLoading, error, products = [] } = useGetProducts();
 
   if (error) {
     return (

@@ -32,7 +32,7 @@ const CreatePage = () => {
           border={"1px solid"}
           borderColor={cardBorder}
           rounded={"2xl"}
-          p={4}
+          p={6}
         >
           <ProductForm submitLabel="Add Product" />
         </Box>

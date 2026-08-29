@@ -46,27 +46,6 @@ export const useProductStore = create<ProductStore>((set) => ({
     }
   },
 
-  // get fxn
-  fetchProducts: async () => {
-    try {
-      const res = await fetch("/api/products");
-      const data = await res.json();
-
-      if (!res.ok) {
-        return {
-          success: false,
-          message: data.message || "Something went wrong",
-        };
-      }
-
-      set({ products: data.data });
-      return { success: true, message: "Products fetched successfully" };
-    } catch (err) {
-      console.error(err);
-      return { success: false, message: "Failed to connect to server" };
-    }
-  },
-
   // delete fxn
   deleteProduct: async (id) => {
     try {

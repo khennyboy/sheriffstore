@@ -1,37 +1,34 @@
-import { useState, useRef } from "react";
-import { toaster } from "../components/ui/toaster";
+import { useQuery } from "@tanstack/react-query";
 import { useProductStore } from "../store/product-store";
+import toast from "../utils/toast";
+import type { GetProductsResponse, ProductDetail } from "../utils/types";
 
 const useGetProducts = () => {
-  const fetchProducts = useProductStore((state) => state.fetchProducts);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const hasFetchedRef = useRef(false);
+  const setProducts = useProductStore((state) => state.setProducts);
 
-  const getProducts = async () => {
-    if (hasFetchedRef.current) return; // guard: block duplicate calls
-    hasFetchedRef.current = true;
+  const { isPending, isError, error, data } = useQuery<ProductDetail[], Error>({
+    queryKey: ["products"],
+    queryFn: async ({ signal }) => {
+      const res = await fetch("/api/products", { signal });
+      const json: GetProductsResponse = await res.json();
 
-    setIsLoading(true);
-    const { success, message } = await fetchProducts();
-    setIsLoading(false);
+      if (!res.ok || !json.success) {
+        throw new Error(
+          !json.success ? json.message : "Failed to fetch products",
+        );
+      }
 
-    if (!success) {
-      setError(message);
-    }
+      setProducts(json.data);
+      toast(true, "Products fetched successfully");
+      return json.data;
+    },
+  });
 
-    toaster.create({
-      title: success ? "Success" : "Error",
-      description: message,
-      type: success ? "success" : "error",
-      duration: 3000,
-      closable: true,
-    });
-
-    return null;
+  return {
+    products: data,
+    isLoading: isPending,
+    error: isError ? error.message : "",
   };
-
-  return { getProducts, isLoading, error };
 };
 
 export default useGetProducts;

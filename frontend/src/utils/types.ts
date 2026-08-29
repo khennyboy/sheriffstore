@@ -1,9 +1,10 @@
 import type { InputProps } from "@chakra-ui/react";
 
+
 export interface Product {
-    name: string;
-    price: number | undefined;
-    image: string;
+  name: string;
+  price: number | undefined;
+  image: string;
 }
 
 export type ProductFormProps = {
@@ -12,20 +13,30 @@ export type ProductFormProps = {
 };
 
 export type FloatingInputProps = InputProps & {
-    label: string;
+  label: string;
 };
 
 
 export type ProductDetail = Product & {
-    _id: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 };
 
+type GetProductsSuccessResponse = {
+  success: true;
+  data: ProductDetail[];
+};
 
+type GetProductsErrorResponse = {
+  success: false;
+  message: string;
+};
+
+export type GetProductsResponse = GetProductsSuccessResponse | GetProductsErrorResponse;
 export type ProductCardProps = {
-    product: ProductDetail;
+  product: ProductDetail;
 };
 
 export type ProductStore = {
@@ -36,7 +47,7 @@ export type ProductStore = {
   createProduct: (
     newProduct: Product
   ) => Promise<{ success: boolean; message: string }>;
-  fetchProducts: () => Promise<{ success: boolean; message: string }>;
+  // fetchProducts: () => Promise<{ success: boolean; message: string }>;
   deleteProduct: (id: string) => Promise<{ success: boolean; message: string }>;
   updateProduct: (
     id: string,
