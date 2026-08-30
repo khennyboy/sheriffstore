@@ -1,6 +1,5 @@
 import { Button, VStack } from "@chakra-ui/react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useAddProduct from "../hooks/handleAddProduct";
 import useUpdateProduct from "../hooks/handleUpdateproduct";
 import { useProductStore } from "../store/product-store";
@@ -17,12 +16,17 @@ const ProductForm = ({
   initialValues = emptyProduct,
   submitLabel = "Save",
 }: ProductFormProps) => {
-  const navigate = useNavigate();
   const [product, setProduct] = useState<Product>(initialValues);
 
   const selectedProduct = useProductStore((state) => state.selectedProduct);
-  const { editProduct, isLoading: isUpdating } = useUpdateProduct();
-  const { addProduct, isLoading: isAdding } = useAddProduct();
+  const setProducts = useProductStore((state) => state.setProducts);
+  const setUpdateDialog = useProductStore((state) => state.setUpdateDialog);
+  const products = useProductStore((state) => state.products);
+
+  const { updateProduct, isUpdating, isUpdatedSuccessfully } =
+    useUpdateProduct();
+
+  const { addProduct, isAdding, isSuccess, data } = useAddProduct();
 
   const isLoading = isUpdating || isAdding;
   const isEmpty = !product.name || !product.price || !product.image;
@@ -34,16 +38,36 @@ const ProductForm = ({
 
   const handleSubmit = async () => {
     if (selectedProduct) {
-      await editProduct(selectedProduct._id, product);
+      const id = selectedProduct._id;
+      updateProduct({ id, product });
+      if (isUpdatedSuccessfully) {
+        setProducts(
+          products.map((product) =>
+            product._id === id
+              ? {
+                  ...product,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image,
+                }
+              : product,
+          ),
+        );
+        setUpdateDialog(false);
+      }
     } else {
-      await addProduct(product);
-      setProduct(emptyProduct);
-      navigate("/");
+      addProduct(product);
+      if (isSuccess) {
+        if (data) {
+          setProducts([...products, data]);
+        }
+        setProduct(emptyProduct);
+      }
     }
   };
 
   return (
-    <VStack gap={4} align={"stretch"} >
+    <VStack gap={4} align={"stretch"}>
       <FloatingInput
         label="Product Name"
         name="name"

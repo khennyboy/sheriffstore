@@ -1,27 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import toast from "../utils/toast";
-import type { OtherProductResponse, Product } from "../utils/types";
+import type { OtherProductResponse } from "../utils/types";
 
-type Tvariable = {
-    product: Product,
-    id: string
-}
-const useUpdateProduct = () => {
+
+const useDeleteProduct = () => {
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
+
     const { mutate, isPending, isSuccess } = useMutation<
         OtherProductResponse, // TData — what mutationFn resolves to
         Error,         // TError
-        Tvariable // TVariables — what you pass into mutate()
+        string // TVariables — what you pass into mutate()
     >({
-        mutationFn: async ({ id, product }) => {
+        mutationFn: async (id) => {
             const res = await fetch(`/api/products/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(product),
+                method: "DELETE",
             });
 
             const json: OtherProductResponse = await res.json();
@@ -33,18 +25,17 @@ const useUpdateProduct = () => {
             return json;
         },
         onSuccess: () => {
-            toast(true, "Product updated successfully");
+            toast(true, "Product deleted successfully");
             queryClient.invalidateQueries({ queryKey: ["products"] });
-            navigate("/")
         },
         onError: (err) => toast(false, err.message)
     });
 
     return {
-        updateProduct: mutate,
-        isUpdating: isPending,
-        isUpdatedSuccessfully: isSuccess
+        deleteProduct: mutate,
+        isDeleting: isPending,
+        isSuccess
     };
 };
 
-export default useUpdateProduct;
+export default useDeleteProduct;

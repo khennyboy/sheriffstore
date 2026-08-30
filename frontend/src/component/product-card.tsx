@@ -6,11 +6,9 @@ import {
   IconButton,
   Image,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { useColorModeValue } from "../components/ui/color-mode";
-import { toaster } from "../components/ui/toaster";
 import { useProductStore } from "../store/product-store";
 import type { ProductCardProps } from "../utils/types";
 
@@ -19,29 +17,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const borderColor = useColorModeValue("gray.200", "gray.800");
   const priceBg = useColorModeValue("purple.50", "purple.950");
   const priceColor = useColorModeValue("purple.700", "purple.300");
-
-  const deleteProduct = useProductStore((state) => state.deleteProduct);
-  const setIsOpen = useProductStore((state) => state.setIsOpen);
   const setSelectedProduct = useProductStore(
     (state) => state.setSelectedProduct,
   );
-
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const handleDeleteProduct = async () => {
-    setIsDeleting(true);
-    const { success, message } = await deleteProduct(product._id);
-    setIsDeleting(false);
-
-    toaster.create({
-      title: success ? "Success" : "Error",
-      description: message,
-      type: success ? "success" : "error",
-      duration: 3000,
-      closable: true,
-    });
-  };
-
+  const setUpdateDialog = useProductStore((state) => state.setUpdateDialog);
+  const setDeleteDialog = useProductStore((state) => state.setDeleteDialog);
   return (
     <Box
       bg={bg}
@@ -86,9 +66,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
               variant={"ghost"}
               size={"sm"}
               rounded={"lg"}
-              disabled={isDeleting}
               onClick={() => {
-                setIsOpen(true);
+                setUpdateDialog(true);
                 setSelectedProduct(product);
               }}
             >
@@ -100,9 +79,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
               size={"sm"}
               rounded={"lg"}
               colorPalette={"red"}
-              loading={isDeleting}
-              disabled={isDeleting}
-              onClick={handleDeleteProduct}
+              onClick={() => {
+                setDeleteDialog(true);
+                setSelectedProduct(product);
+              }}
             >
               <MdOutlineDeleteOutline />
             </IconButton>

@@ -1,12 +1,13 @@
 import { Box } from "@chakra-ui/react";
+import { Route, Routes } from "react-router-dom";
+import ConfirmDeleteDialog from "./component/ConfirmDalog";
+import Footer from "./component/Footer";
 import NavBar from "./component/NavBar";
+import UpdateDialog from "./component/UpdateDialog";
+import { useColorModeValue } from "./components/ui/color-mode";
+import { Toaster } from "./components/ui/toaster";
 import CreatePage from "./pages/CreatePage";
 import HomePage from "./pages/HomePage";
-import { Route, Routes } from "react-router-dom";
-import { useColorModeValue } from "./components/ui/color-mode";
-import Modal from "./component/Modal";
-import { Toaster } from "./components/ui/toaster";
-import Footer from "./component/Footer";
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
         <Route path="/create" element={<CreatePage />} />
       </Routes>
       <Footer />
-      <Modal />
+      <UpdateDialog />
+      <ConfirmDeleteDialog />
       <Toaster />
     </Box>
   );

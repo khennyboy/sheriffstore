@@ -2,15 +2,15 @@ import { CloseButton, Dialog } from "@chakra-ui/react";
 import { useProductStore } from "../store/product-store";
 import ProductForm from "./ProductForm";
 
-const Modal = () => {
-  const open = useProductStore((state) => state.open);
-  const setIsOpen = useProductStore((state) => state.setIsOpen);
+const UpdateDialog = () => {
+  const updateDialog = useProductStore((state) => state.updateDialog);
+  const setUpdateDialog = useProductStore((state) => state.setUpdateDialog);
   const selectedProduct = useProductStore((state) => state.selectedProduct);
 
   return (
     <Dialog.Root
-      open={open}
-      onOpenChange={(e) => setIsOpen(e.open)}
+      open={updateDialog}
+      onOpenChange={(e) => setUpdateDialog(e.open)}
       placement={"center"}
     >
       <Dialog.Backdrop />
@@ -43,4 +43,4 @@ const Modal = () => {
   );
 };
 
-export default Modal;
+export default UpdateDialog;

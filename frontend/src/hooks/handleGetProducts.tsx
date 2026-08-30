@@ -10,14 +10,13 @@ const useGetProducts = () => {
     queryKey: ["products"],
     queryFn: async ({ signal }) => {
       const res = await fetch("/api/products", { signal });
+
       const json: GetProductsResponse = await res.json();
 
-      if (!res.ok || !json.success) {
-        throw new Error(
-          !json.success ? json.message : "Failed to fetch products",
-        );
+      if (!json.success) {
+        throw new Error(json.message);
       }
-
+      // ts knows that on reaching here success must be true
       setProducts(json.data);
       toast(true, "Products fetched successfully");
       return json.data;

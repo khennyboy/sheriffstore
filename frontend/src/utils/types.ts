@@ -16,7 +16,6 @@ export type FloatingInputProps = InputProps & {
   label: string;
 };
 
-
 export type ProductDetail = Product & {
   _id: string;
   createdAt: string;
@@ -24,6 +23,7 @@ export type ProductDetail = Product & {
   __v: number;
 };
 
+// for GET /api/products — returns a LIST
 type GetProductsSuccessResponse = {
   success: true;
   data: ProductDetail[];
@@ -34,25 +34,43 @@ type GetProductsErrorResponse = {
   message: string;
 };
 
-export type GetProductsResponse = GetProductsSuccessResponse | GetProductsErrorResponse;
+export type GetProductsResponse =
+  | GetProductsSuccessResponse
+  | GetProductsErrorResponse;
+
+// for POST /api/products 
+type CreateProductSuccessResponse = {
+  success: true;
+  data: ProductDetail;
+};
+
+type CreateProductErrorResponse = {
+  success: false;
+  message: string;
+};
+
+export type CreateProductResponse =
+  | CreateProductSuccessResponse
+  | CreateProductErrorResponse;
+
+
+// for other api's responsee
+export type OtherProductResponse = {
+  success: boolean,
+  message: string
+}
+
 export type ProductCardProps = {
   product: ProductDetail;
 };
 
 export type ProductStore = {
-  open: boolean;
-  setIsOpen: (open: boolean) => void;
+  updateDialog: boolean;
+  setUpdateDialog: (open: boolean) => void;
   products: ProductDetail[];
   setProducts: (products: ProductDetail[]) => void;
-  createProduct: (
-    newProduct: Product
-  ) => Promise<{ success: boolean; message: string }>;
-  // fetchProducts: () => Promise<{ success: boolean; message: string }>;
-  deleteProduct: (id: string) => Promise<{ success: boolean; message: string }>;
-  updateProduct: (
-    id: string,
-    updatedProduct: Product
-  ) => Promise<{ success: boolean; message: string }>;
   selectedProduct: ProductDetail | null;
   setSelectedProduct: (product: ProductDetail | null) => void;
+  deleteDialog: boolean,
+  setDeleteDialog: (open: boolean) => void
 };
