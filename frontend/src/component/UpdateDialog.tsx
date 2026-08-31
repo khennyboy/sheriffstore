@@ -31,7 +31,7 @@ const UpdateDialog = () => {
             />
           </Dialog.CloseTrigger>
 
-          <Dialog.Body px={4} pb={5}>
+          <Dialog.Body px={3} pb={5}>
             <ProductForm
               initialValues={selectedProduct ?? undefined}
               submitLabel="Save Changes"

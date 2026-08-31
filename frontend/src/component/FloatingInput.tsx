@@ -51,7 +51,7 @@ const FloatingInput = ({ label, error, ...props }: FloatingInputProps) => {
       <Text
         color="red.500"
         fontSize="xs"
-        mt={1}
+        my={1}
         minH="16px"
         visibility={error ? "visible" : "hidden"}
       >

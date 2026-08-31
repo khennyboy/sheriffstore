@@ -12,8 +12,6 @@ const ConfirmDeleteDialog = () => {
     if (selectedProduct) {
       deleteProduct(selectedProduct._id);
     }
-
-
   };
 
   return (

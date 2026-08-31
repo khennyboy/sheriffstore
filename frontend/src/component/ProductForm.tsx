@@ -7,6 +7,7 @@ import useUpdateProduct from "../hooks/handleUpdateproduct";
 import { useProductStore } from "../store/product-store";
 import type { Product, ProductFormProps } from "../utils/types";
 import FloatingInput from "./FloatingInput";
+import { useShallow } from "zustand/react/shallow";
 
 const productSchema = z.object({
   name: z.string().trim().min(1, "Product name is required"),
@@ -31,10 +32,13 @@ const ProductForm = ({
   initialValues = emptyProduct,
   submitLabel = "Save",
 }: ProductFormProps) => {
-  const selectedProduct = useProductStore((state) => state.selectedProduct);
-  const setProducts = useProductStore((state) => state.setProducts);
-  const setUpdateDialog = useProductStore((state) => state.setUpdateDialog);
-  const products = useProductStore((state) => state.products);
+  const { selectedProduct, setProducts, products } = useProductStore(
+    useShallow((state) => ({
+      selectedProduct: state.selectedProduct,
+      setProducts: state.setProducts, // still needed for the ADD path below
+      products: state.products, // still needed for the ADD path below
+    })),
+  );
 
   const { updateProduct, isUpdating } = useUpdateProduct();
   const { addProduct, isAdding } = useAddProduct();
@@ -63,17 +67,7 @@ const ProductForm = ({
 
     if (selectedProduct) {
       const id = selectedProduct._id;
-      updateProduct(
-        { id, product },
-        {
-          onSuccess: () => {
-            setProducts(
-              products.map((p) => (p._id === id ? { ...p, ...product } : p)),
-            );
-            setUpdateDialog(false);
-          },
-        },
-      );
+      updateProduct({ id, product });
     } else {
       addProduct(product, {
         onSuccess: (data) => {
@@ -87,7 +81,7 @@ const ProductForm = ({
   return (
     <VStack
       as="form"
-      gap={4}
+      gap={1}
       align={"stretch"}
       onSubmit={handleSubmit(onSubmit)}
     >
@@ -115,7 +109,6 @@ const ProductForm = ({
             name="price"
             value={field.value}
             onChange={field.onChange}
-            onFocus={(e) => e.target.select()}
             error={errors.price?.message}
           />
         )}

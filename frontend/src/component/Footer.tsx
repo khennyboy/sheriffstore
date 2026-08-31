@@ -23,7 +23,7 @@ const Footer = () => {
       bg={bg}
       borderTop="1px solid"
       borderColor={borderColor}
-      mt={20}
+      mt={12}
     >
       <Container maxW={"1140px"} py={10}>
         <Flex

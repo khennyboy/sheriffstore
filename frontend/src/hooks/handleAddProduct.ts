@@ -37,7 +37,6 @@ const useAddProduct = () => {
         },
         onError: (err) => toast(false, err.message)
     });
-    console.log(data, 'data')
     return {
         addProduct: mutate,
         isAdding: isPending,

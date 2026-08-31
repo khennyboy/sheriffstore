@@ -14,17 +14,22 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useColorModeValue } from "../components/ui/color-mode";
 import { useProductStore } from "../store/product-store";
 import type { ProductCardProps } from "../utils/types";
+import { useShallow } from "zustand/react/shallow";
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const bg = useColorModeValue("white", "gray.900");
   const borderColor = useColorModeValue("gray.200", "gray.800");
   const priceBg = useColorModeValue("purple.50", "purple.950");
   const priceColor = useColorModeValue("purple.700", "purple.300");
-  const setSelectedProduct = useProductStore(
-    (state) => state.setSelectedProduct,
-  );
-  const setUpdateDialog = useProductStore((state) => state.setUpdateDialog);
-  const setDeleteDialog = useProductStore((state) => state.setDeleteDialog);
+
+  const { setSelectedProduct, setUpdateDialog, setDeleteDialog } =
+    useProductStore(
+      useShallow((state) => ({
+        setSelectedProduct: state.setSelectedProduct,
+        setUpdateDialog: state.setUpdateDialog,
+        setDeleteDialog: state.setDeleteDialog,
+      })),
+    );
 
   return (
     <Box
@@ -46,7 +51,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         />
       </AspectRatio>
 
-      <Box p={4}>
+      <Box px={2} py={4}>
         <Heading as="h3" size="sm" mb={2} lineClamp={1}>
           {product.name}
         </Heading>
@@ -109,8 +114,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
               </Menu.Trigger>
               <Portal>
                 <Menu.Positioner>
-                  <Menu.Content>
+                  <Menu.Content rounded={"xl"} w={"fit-content"} minW={0}>
                     <Menu.Item
+                      px={4}
+                      rounded={"lg"}
                       cursor={"pointer"}
                       value="edit"
                       onClick={() => {
@@ -124,6 +131,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
                       </HStack>
                     </Menu.Item>
                     <Menu.Item
+                      px={4}
+                      rounded={"lg"}
                       cursor={"pointer"}
                       value="delete"
                       color={"red.500"}

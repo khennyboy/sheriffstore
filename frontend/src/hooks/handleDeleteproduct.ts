@@ -1,37 +1,66 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "../utils/toast";
-import type { OtherProductResponse } from "../utils/types";
+import type { OtherProductResponse, ProductDetail } from "../utils/types";
 import { useProductStore } from "../store/product-store";
+import { useShallow } from "zustand/react/shallow";
+import { useSearchParams } from "react-router-dom";
 
+type DeleteContext = {
+    products: ProductDetail[];
+    totalProducts: number;
+    pageSize: number;
+};
 
 const useDeleteProduct = () => {
     const queryClient = useQueryClient();
-    const setDeleteDialog = useProductStore((state) => state.setDeleteDialog);
+    const [searchParams] = useSearchParams();
+    const page = Number(searchParams.get("page")) || 1;
+
+    const { setProducts, setCounts, setDeleteDialog } = useProductStore(
+        useShallow((state) => ({
+            setCounts: state.setCounts,
+            setProducts: state.setProducts,
+            setDeleteDialog: state.setDeleteDialog
+        })),
+    );
 
     const { mutate, isPending } = useMutation<
-        OtherProductResponse, // TData — what mutationFn resolves to
-        Error,         // TError
-        string // TVariables — what you pass into mutate()
+        OtherProductResponse, // type of data returned
+        Error,
+        string,
+        DeleteContext // delete context parameter
     >({
         mutationFn: async (id) => {
-            const res = await fetch(`/api/products/${id}`, {
-                method: "DELETE",
-            });
-
+            const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
             const json: OtherProductResponse = await res.json();
-
-            if (!json.success) {
-                throw new Error(json.message);
-            }
-
+            if (!json.success) throw new Error(json.message);
             return json;
         },
-        onSuccess: () => {
-            setDeleteDialog(false)
-            toast(true, "Product deleted successfully");
-            queryClient.invalidateQueries({ queryKey: ["products"] });
+        onMutate: async (id) => {
+            setDeleteDialog(false);
+
+            // snapshot for rollback
+            const { products, totalProducts, pageSize } =
+                useProductStore.getState();
+
+            // instantly remove from list and decrement count — no waiting on refetch
+            setProducts(products.filter((p) => p._id !== id));
+            setCounts(Math.max(totalProducts - 1, 0), pageSize);
+
+            return { products, totalProducts, pageSize };
         },
-        onError: (err) => toast(false, err.message)
+        onError: (err, _id, context) => {
+            if (context) {
+                setProducts(context.products);
+                setCounts(context.totalProducts, context.pageSize);
+            }
+            toast(false, err.message);
+        },
+        onSuccess: () => {
+            toast(true, "Product deleted successfully");
+            // reconciles server truth in the background, no UI lag either way
+            queryClient.invalidateQueries({ queryKey: ["products", page] });
+        },
     });
 
     return {

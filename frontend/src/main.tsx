@@ -1,24 +1,22 @@
+import {
+  QueryClient,
+  QueryClientProvider
+} from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App.tsx";
 import "../src/index.css";
-import { Provider } from "./components/ui/provider.tsx";
+import App from "./App.tsx";
 import ScrollToTop from "./component/ScrolltoTop.tsx";
-import {
-  QueryCache,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import toast from "./utils/toast.ts";
+import { Provider } from "./components/ui/provider.tsx";
 
 const queryClient = new QueryClient({
-  queryCache: new QueryCache({
-    onError: (error) => {
-      toast(false, error.message);
-    },
-  }),
+  // queryCache: new QueryCache({
+  //   onError: (error) => {
+  //     toast(false, error.message);
+  //   },
+  // }),
   defaultOptions: {
     queries: {
       staleTime: Infinity,

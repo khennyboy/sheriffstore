@@ -12,8 +12,13 @@ export const useProductStore = create<ProductStore>((set) => ({
   products: [],
   setProducts: (products) => set({ products }),
 
+  totalProducts: 0,
+  pageSize: 0,
+  setCounts: (totalProducts, pageSize) => set({ totalProducts, pageSize }),
+
   selectedProduct: null,
   setSelectedProduct: (product) => set({ selectedProduct: product }),
+
   deleteDialog: false,
   setDeleteDialog: (open) =>
     set((state) => ({

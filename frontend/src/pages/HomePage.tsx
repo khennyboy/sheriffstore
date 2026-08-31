@@ -10,18 +10,43 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { LuPackageOpen } from "react-icons/lu";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import ProductCard from "../component/product-card";
 
 import { IoWarning } from "react-icons/io5";
 import { useColorModeValue } from "../components/ui/color-mode";
 import useGetProducts from "../hooks/handleGetProducts";
+import Productpagination from "../component/Productpagination";
+import { useProductStore } from "../store/product-store";
+import { useShallow } from "zustand/react/shallow";
+import { computePagination } from "../utils/pagination";
 
 const HomePage = () => {
   const subTextColor = useColorModeValue("gray.500", "gray.400");
   const emptyBg = useColorModeValue("white", "gray.900");
   const emptyBorder = useColorModeValue("gray.200", "gray.800");
-  const { isLoading, error, products = [] } = useGetProducts();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+
+  const goToPage = (nextPage: number) => {
+    setSearchParams((prev) => {
+      prev.set("page", String(nextPage));
+      return prev;
+    });
+  };
+
+  const { isLoading, error } = useGetProducts(page);
+
+  const { products, totalProducts, pageSize } = useProductStore(
+    useShallow((state) => ({
+      products: state.products,
+      totalProducts: state.totalProducts,
+      pageSize: state.pageSize,
+    })),
+  );
+
+  const pagination = computePagination(page, totalProducts, pageSize);
 
   if (error) {
     return (
@@ -49,10 +74,11 @@ const HomePage = () => {
       </Container>
     );
   }
+
   return (
-    <Container maxW={"1140px"} py={12} minH={"dvh"}>
-      <VStack gap={10} align={"stretch"}>
-        <VStack gap={1} align={"start"}>
+    <Container maxW={"1140px"} py={8} minH={"dvh"}>
+      <VStack gap={7} align={"stretch"}>
+        <VStack gap={0.5} align={"start"}>
           <Heading
             fontSize={"3xl"}
             fontWeight={"extrabold"}
@@ -63,7 +89,12 @@ const HomePage = () => {
           <Text color={subTextColor} fontSize={"md"}>
             {isLoading
               ? "Loading your catalog…"
-              : `${products.length} product${products.length === 1 ? "" : "s"} in your store`}
+              : `${totalProducts} product${products.length === 1 ? "" : "s"} in your store`}
+          </Text>
+          <Text color={subTextColor} fontSize={"sm"}>
+            {totalProducts !== 0 && pagination.hasNextPage
+              ? `Showing pages ${page} of ${pagination.totalPages}`
+              : ""}
           </Text>
         </VStack>
 
@@ -108,11 +139,19 @@ const HomePage = () => {
             </VStack>
           </Box>
         ) : (
-          <SimpleGrid columns={{ base: 2, md: 2, lg: 3 }} gap={6} w={"full"}>
-            {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </SimpleGrid>
+          <Box>
+            <SimpleGrid columns={{ base: 2, md: 2, lg: 3 }} gap={6} w={"full"}>
+              {products.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </SimpleGrid>
+
+            <Productpagination
+              pagination={pagination}
+              page={page}
+              onPageChange={goToPage}
+            />
+          </Box>
         )}
       </VStack>
     </Container>

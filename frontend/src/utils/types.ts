@@ -24,10 +24,21 @@ export type ProductDetail = Product & {
   __v: number;
 };
 
+// handles pagination data type
+export type Pagination = {
+  pageSize: number;
+  totalPages: number;
+  totalProducts: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+};
+
 // for GET /api/products — returns a LIST
-type GetProductsSuccessResponse = {
+export type GetProductsSuccessResponse = {
   success: true;
   data: ProductDetail[];
+  totalProducts: number;
+  pageSize: number;
 };
 
 type GetProductsErrorResponse = {
@@ -70,17 +81,11 @@ export type ProductStore = {
   setUpdateDialog: (open: boolean) => void;
   products: ProductDetail[];
   setProducts: (products: ProductDetail[]) => void;
+  totalProducts: number;
+  pageSize: number;
+  setCounts: (totalProducts: number, pageSize: number) => void;
   selectedProduct: ProductDetail | null;
   setSelectedProduct: (product: ProductDetail | null) => void;
-  deleteDialog: boolean,
-  setDeleteDialog: (open: boolean) => void
-};
-
-
-export type Pagination = {
-  currentPage: number;
-  totalPages: number;
-  totalProducts: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
+  deleteDialog: boolean;
+  setDeleteDialog: (open: boolean) => void;
 };
