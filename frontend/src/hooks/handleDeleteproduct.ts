@@ -8,7 +8,7 @@ const useDeleteProduct = () => {
     const queryClient = useQueryClient();
     const setDeleteDialog = useProductStore((state) => state.setDeleteDialog);
 
-    const { mutate, isPending, isSuccess } = useMutation<
+    const { mutate, isPending } = useMutation<
         OtherProductResponse, // TData — what mutationFn resolves to
         Error,         // TError
         string // TVariables — what you pass into mutate()
