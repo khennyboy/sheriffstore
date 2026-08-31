@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useProductStore } from "../store/product-store";
-import toast from "../utils/toast";
 import type { GetProductsResponse, ProductDetail } from "../utils/types";
 
 const useGetProducts = () => {
@@ -18,7 +17,6 @@ const useGetProducts = () => {
       }
       // ts knows that on reaching here success must be true
       setProducts(json.data);
-      toast(true, "Products fetched successfully");
       return json.data;
     },
   });

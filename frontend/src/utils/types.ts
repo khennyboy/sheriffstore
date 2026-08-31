@@ -3,7 +3,7 @@ import type { InputProps } from "@chakra-ui/react";
 
 export interface Product {
   name: string;
-  price: number | undefined;
+  price: string;
   image: string;
 }
 
@@ -14,6 +14,7 @@ export type ProductFormProps = {
 
 export type FloatingInputProps = InputProps & {
   label: string;
+  error?: string
 };
 
 export type ProductDetail = Product & {
@@ -73,4 +74,13 @@ export type ProductStore = {
   setSelectedProduct: (product: ProductDetail | null) => void;
   deleteDialog: boolean,
   setDeleteDialog: (open: boolean) => void
+};
+
+
+export type Pagination = {
+  currentPage: number;
+  totalPages: number;
+  totalProducts: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
 };

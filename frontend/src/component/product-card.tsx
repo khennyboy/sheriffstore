@@ -5,9 +5,12 @@ import {
   HStack,
   IconButton,
   Image,
+  Menu,
+  Portal,
 } from "@chakra-ui/react";
 import { CiEdit } from "react-icons/ci";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { useColorModeValue } from "../components/ui/color-mode";
 import { useProductStore } from "../store/product-store";
 import type { ProductCardProps } from "../utils/types";
@@ -22,6 +25,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   );
   const setUpdateDialog = useProductStore((state) => state.setUpdateDialog);
   const setDeleteDialog = useProductStore((state) => state.setDeleteDialog);
+
   return (
     <Box
       bg={bg}
@@ -60,7 +64,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
             ${product.price}
           </Box>
 
-          <HStack gap={1} transition={"opacity 0.15s ease"}>
+          {/* Icons: visible md and up */}
+          <HStack gap={1} display={{ base: "none", md: "flex" }}>
             <IconButton
               aria-label="Edit product"
               variant={"ghost"}
@@ -87,6 +92,54 @@ const ProductCard = ({ product }: ProductCardProps) => {
               <MdOutlineDeleteOutline />
             </IconButton>
           </HStack>
+
+          {/* Ellipsis menu: visible below md */}
+          <Box display={{ base: "block", md: "none" }}>
+            <Menu.Root positioning={{ placement: "bottom-end" }}>
+              <Menu.Trigger asChild>
+                <IconButton
+                  aria-label="Product actions"
+                  variant={"ghost"}
+                  size={"sm"}
+                  rounded={"lg"}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <BsThreeDotsVertical />
+                </IconButton>
+              </Menu.Trigger>
+              <Portal>
+                <Menu.Positioner>
+                  <Menu.Content>
+                    <Menu.Item
+                      value="edit"
+                      onClick={() => {
+                        setUpdateDialog(true);
+                        setSelectedProduct(product);
+                      }}
+                    >
+                      <HStack gap={2}>
+                        <CiEdit />
+                        <Box>Edit</Box>
+                      </HStack>
+                    </Menu.Item>
+                    <Menu.Item
+                      value="delete"
+                      color={"red.500"}
+                      onClick={() => {
+                        setDeleteDialog(true);
+                        setSelectedProduct(product);
+                      }}
+                    >
+                      <HStack gap={2}>
+                        <MdOutlineDeleteOutline />
+                        <Box>Delete</Box>
+                      </HStack>
+                    </Menu.Item>
+                  </Menu.Content>
+                </Menu.Positioner>
+              </Portal>
+            </Menu.Root>
+          </Box>
         </HStack>
       </Box>
     </Box>

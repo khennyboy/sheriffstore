@@ -108,7 +108,7 @@ const HomePage = () => {
             </VStack>
           </Box>
         ) : (
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6} w={"full"}>
+          <SimpleGrid columns={{ base: 2, md: 2, lg: 3 }} gap={6} w={"full"}>
             {products.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
