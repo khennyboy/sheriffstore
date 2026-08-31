@@ -2,14 +2,22 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useProductStore } from "../store/product-store";
 import type {
-  GetProductsResponse,
+  GetProductsErrorResponse,
   GetProductsSuccessResponse,
 } from "../utils/types";
 
 const fetchProducts = async (page: number, signal?: AbortSignal) => {
   const res = await fetch(`/api/products?page=${page}`, { signal });
-  const json: GetProductsResponse = await res.json();
-  if (!json.success) throw new Error(json.message);
+  if (!res.ok) {
+    const errorJson: GetProductsErrorResponse = await res.json().catch(
+      (): GetProductsErrorResponse => ({
+        success: false,
+        message: "An unknown network error occurred.",
+      }),
+    );
+    throw new Error(errorJson.message);
+  }
+  const json = await res.json();
   return json;
 };
 
@@ -27,13 +35,12 @@ const useGetProducts = (page: number) => {
     placeholderData: (previousData) => previousData,
   });
 
-
   useEffect(() => {
     if (data) {
       setProducts(data.data);
       setCounts(data.totalProducts, data.pageSize);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   // prefetch neighbors using the same derived totalPages logic

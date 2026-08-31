@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
+import { useShallow } from "zustand/react/shallow";
+import { useProductStore } from "../store/product-store";
 import toast from "../utils/toast";
 import type { OtherProductResponse, ProductDetail } from "../utils/types";
-import { useProductStore } from "../store/product-store";
-import { useShallow } from "zustand/react/shallow";
-import { useSearchParams } from "react-router-dom";
 
 type DeleteContext = {
     products: ProductDetail[];
@@ -32,8 +32,17 @@ const useDeleteProduct = () => {
     >({
         mutationFn: async (id) => {
             const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
-            const json: OtherProductResponse = await res.json();
-            if (!json.success) throw new Error(json.message);
+            if (!res.ok) {
+                const errorJson: OtherProductResponse = await res.json().catch(
+                    // Explicitly typing the return of the catch callback forces TS to validate it
+                    (): OtherProductResponse => ({
+                        success: false,
+                        message: "An unknown network error occurred.",
+                    })
+                );
+                throw new Error(errorJson.message)
+            }
+            const json = await res.json();
             return json;
         },
         onMutate: async (id) => {

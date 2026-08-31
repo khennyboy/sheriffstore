@@ -41,29 +41,17 @@ export type GetProductsSuccessResponse = {
   pageSize: number;
 };
 
-type GetProductsErrorResponse = {
+export type GetProductsErrorResponse = {
   success: false;
   message: string;
 };
 
-export type GetProductsResponse =
-  | GetProductsSuccessResponse
-  | GetProductsErrorResponse;
 
 // for POST /api/products 
-type CreateProductSuccessResponse = {
-  success: true;
-  data: ProductDetail;
-};
-
-type CreateProductErrorResponse = {
+export type CreateProductErrorResponse = {
   success: false;
   message: string;
 };
-
-export type CreateProductResponse =
-  | CreateProductSuccessResponse
-  | CreateProductErrorResponse;
 
 
 // for other api's responsee

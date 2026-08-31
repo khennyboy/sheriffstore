@@ -38,12 +38,17 @@ const useUpdateProduct = () => {
                 body: JSON.stringify(product),
             });
 
-            const json: OtherProductResponse = await res.json();
-
-            if (!json.success) {
-                throw new Error(json.message);
+            if (!res.ok) {
+                const errorJson: OtherProductResponse = await res.json().catch(
+                    (): OtherProductResponse => ({
+                        success: false,
+                        message: "An unknown network error occurred.",
+                    })
+                );
+                throw new Error(errorJson.message)
             }
 
+            const json = await res.json();
             return json;
         },
         onMutate: async ({ id, product }) => {

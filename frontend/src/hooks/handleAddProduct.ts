@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import toast from "../utils/toast";
-import type { CreateProductResponse, Product, ProductDetail } from "../utils/types";
+import type { CreateProductErrorResponse, Product, ProductDetail } from "../utils/types";
 
 const useAddProduct = () => {
     const queryClient = useQueryClient();
@@ -21,13 +21,16 @@ const useAddProduct = () => {
                 },
                 body: JSON.stringify(newProduct),
             });
-
-            const json: CreateProductResponse = await res.json();
-
-            if (!json.success) {
-                throw new Error(json.message);
+            if (!res.ok) {
+                const errorJson: CreateProductErrorResponse = await res.json().catch(
+                    (): CreateProductErrorResponse => ({
+                        success: false,
+                        message: "An unknown network error occurred.",
+                    })
+                );
+                throw new Error(errorJson.message)
             }
-
+            const json = await res.json();
             return json.data;
         },
         onSuccess: () => {
