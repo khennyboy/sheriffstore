@@ -51,12 +51,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
         />
       </AspectRatio>
 
-      <Box px={2} py={4}>
-        <Heading as="h3" size="sm" mb={2} lineClamp={1}>
+      <Box py={4}>
+        <Heading as="h3" size="sm" mb={2} lineClamp={1} pl={{ base: 2, md: 4 }}>
           {product.name}
         </Heading>
 
-        <HStack justify={"space-between"} align={"center"}>
+        <HStack
+          justify={"space-between"}
+          align={"center"}
+          px={{ base: 1, md: 4 }}
+        >
           <Box
             bg={priceBg}
             color={priceColor}
@@ -105,7 +109,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 <IconButton
                   aria-label="Product actions"
                   variant={"ghost"}
-                  size={"sm"}
+                  size={"xs"}
                   rounded={"lg"}
                   onClick={(e) => e.stopPropagation()}
                 >

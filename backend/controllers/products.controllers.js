@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Product from "../models/products.model.js";
 
-const limit = 11;
+const limit = 10;
 // get products
 export const getProducts = async (req, res) => {
   try {
