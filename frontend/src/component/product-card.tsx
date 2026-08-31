@@ -111,6 +111,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 <Menu.Positioner>
                   <Menu.Content>
                     <Menu.Item
+                      cursor={"pointer"}
                       value="edit"
                       onClick={() => {
                         setUpdateDialog(true);
@@ -123,6 +124,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                       </HStack>
                     </Menu.Item>
                     <Menu.Item
+                      cursor={"pointer"}
                       value="delete"
                       color={"red.500"}
                       onClick={() => {
