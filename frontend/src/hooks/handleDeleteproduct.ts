@@ -1,10 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "../utils/toast";
 import type { OtherProductResponse } from "../utils/types";
+import { useProductStore } from "../store/product-store";
 
 
 const useDeleteProduct = () => {
     const queryClient = useQueryClient();
+    const setDeleteDialog = useProductStore((state) => state.setDeleteDialog);
 
     const { mutate, isPending, isSuccess } = useMutation<
         OtherProductResponse, // TData — what mutationFn resolves to
@@ -25,6 +27,7 @@ const useDeleteProduct = () => {
             return json;
         },
         onSuccess: () => {
+            setDeleteDialog(false)
             toast(true, "Product deleted successfully");
             queryClient.invalidateQueries({ queryKey: ["products"] });
         },
@@ -34,7 +37,6 @@ const useDeleteProduct = () => {
     return {
         deleteProduct: mutate,
         isDeleting: isPending,
-        isSuccess
     };
 };
 

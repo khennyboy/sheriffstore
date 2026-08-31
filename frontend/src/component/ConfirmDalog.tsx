@@ -6,14 +6,14 @@ const ConfirmDeleteDialog = () => {
   const deleteDialog = useProductStore((state) => state.deleteDialog);
   const selectedProduct = useProductStore((state) => state.selectedProduct);
   const setDeleteDialog = useProductStore((state) => state.setDeleteDialog);
-  const { deleteProduct, isDeleting, isSuccess } = useDeleteProduct();
+  const { deleteProduct, isDeleting } = useDeleteProduct();
 
   const handleConfirmDelete = async () => {
     if (selectedProduct) {
       deleteProduct(selectedProduct._id);
     }
 
-    if (isSuccess) setDeleteDialog(false);
+
   };
 
   return (
