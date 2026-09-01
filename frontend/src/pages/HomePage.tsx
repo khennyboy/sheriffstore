@@ -15,7 +15,7 @@ import ProductCard from "../component/product-card";
 
 import { IoWarning } from "react-icons/io5";
 import { useColorModeValue } from "../components/ui/color-mode";
-import useGetProducts from "../hooks/handleGetProducts";
+import useGetProducts from "../hooks/useGetProducts";
 import Productpagination from "../component/Productpagination";
 import { useProductStore } from "../store/product-store";
 import { useShallow } from "zustand/react/shallow";
@@ -92,7 +92,7 @@ const HomePage = () => {
               : `${totalProducts} product${products.length === 1 ? "" : "s"} in your store`}
           </Text>
           <Text color={subTextColor} fontSize={"sm"}>
-            {totalProducts !== 0 && pagination.hasNextPage
+            {totalProducts !== 0 && pageSize < totalProducts
               ? `Showing pages ${page} of ${pagination.totalPages}`
               : ""}
           </Text>

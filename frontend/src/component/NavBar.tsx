@@ -1,14 +1,16 @@
 import { Box, Button, Container, Flex, HStack, Text } from "@chakra-ui/react";
 import { FaRegMoon } from "react-icons/fa";
 import { MdOutlineWbSunny } from "react-icons/md";
-import { LuPlus } from "react-icons/lu";
+import { LuPlus, LuLogOut } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { useColorMode, useColorModeValue } from "../components/ui/color-mode";
+import useLogout from "../hooks/useLogout";
 
 const NavBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const borderColor = useColorModeValue("gray.200", "gray.800");
   const bg = useColorModeValue("white", "gray.900");
+  const { logout, isLoading: isLoggingOut } = useLogout();
 
   return (
     <Box
@@ -63,6 +65,16 @@ const NavBar = () => {
               size={"sm"}
             >
               {colorMode === "light" ? <FaRegMoon /> : <MdOutlineWbSunny />}
+            </Button>
+            <Button
+              onClick={() => logout()}
+              loading={isLoggingOut}
+              variant={"ghost"}
+              rounded={"lg"}
+              size={"sm"}
+              colorPalette={"red"}
+            >
+              <LuLogOut size={16} />
             </Button>
           </HStack>
         </Flex>

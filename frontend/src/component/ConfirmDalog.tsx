@@ -1,5 +1,5 @@
 import { Button, Dialog, Text } from "@chakra-ui/react";
-import useDeleteProduct from "../hooks/handleDeleteproduct";
+import useDeleteProduct from "../hooks/useDeleteproduct";
 import { useProductStore } from "../store/product-store";
 
 const ConfirmDeleteDialog = () => {

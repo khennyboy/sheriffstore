@@ -32,6 +32,7 @@ const useUpdateProduct = () => {
         mutationFn: async ({ id, product }) => {
             const res = await fetch(`/api/products/${id}`, {
                 method: "PUT",
+                credentials: 'include',
                 headers: {
                     "Content-Type": "application/json",
                 },

@@ -1,17 +1,30 @@
-import { Box, Input, Text } from "@chakra-ui/react";
+import { useState } from "react";
+import { Box, IconButton, Input, Text } from "@chakra-ui/react";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useColorModeValue } from "../components/ui/color-mode";
 import type { FloatingInputProps } from "../utils/types";
 
-const FloatingInput = ({ label, error, ...props }: FloatingInputProps) => {
+const FloatingInput = ({
+  label,
+  error,
+  w,
+  type,
+  ...props
+}: FloatingInputProps) => {
   const inputBg = useColorModeValue("gray.100", "gray.800");
   const inputColor = useColorModeValue("gray.900", "white");
   const labelColor = useColorModeValue("gray.500", "gray.400");
 
+  const isPassword = type === "password";
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
-    <Box>
-      <Box position="relative" h="52px">
+    <Box w={w ?? "full"}>
+      <Box position="relative" h="52px" w="full">
         <Input
           {...props}
+          type={isPassword ? (showPassword ? "text" : "password") : type}
+          w="full"
           placeholder=" "
           bg={inputBg}
           color={inputColor}
@@ -20,6 +33,7 @@ const FloatingInput = ({ label, error, ...props }: FloatingInputProps) => {
           h="52px"
           pt="22px"
           pb="6px"
+          pr={isPassword ? "44px" : undefined}
           fontSize="md"
           _focus={{
             bg: inputBg,
@@ -46,6 +60,23 @@ const FloatingInput = ({ label, error, ...props }: FloatingInputProps) => {
         >
           {label}
         </Text>
+
+        {isPassword && (
+          <IconButton
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            variant="ghost"
+            size="sm"
+            position="absolute"
+            right="6px"
+            top="50%"
+            transform="translateY(-50%)"
+            rounded="lg"
+            onClick={() => setShowPassword((prev) => !prev)}
+            tabIndex={-1}
+          >
+            {showPassword ? <LuEyeOff /> : <LuEye />}
+          </IconButton>
+        )}
       </Box>
 
       <Text

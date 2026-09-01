@@ -2,7 +2,10 @@ import dotenv from "dotenv";
 import express from "express";
 import path from "path";
 import { connectDB } from "./config/db.js";
-import { router as productRoutes } from "./routes/products.route.js";
+import productRoutes from "./routes/products.route.js";
+import cookieParser from "cookie-parser";
+import authRoutes from "./routes/auth.route.js";
+import { protectRoute } from "./middleware/protected-route.js";
 
 dotenv.config();
 
@@ -11,7 +14,10 @@ const PORT = process.env.PORT || 8000;
 const __dirname = path.resolve();
 
 app.use(express.json());
+app.use(cookieParser());
 
+app.use("/api/auth", authRoutes);
+app.use(protectRoute);
 app.use("/api/products", productRoutes);
 
 if (process.env.NODE_ENV === "production") {

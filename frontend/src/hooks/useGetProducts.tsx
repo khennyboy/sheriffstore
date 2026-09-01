@@ -7,7 +7,10 @@ import type {
 } from "../utils/types";
 
 const fetchProducts = async (page: number, signal?: AbortSignal) => {
-  const res = await fetch(`/api/products?page=${page}`, { signal });
+  const res = await fetch(`/api/products?page=${page}`, {
+    credentials: "include",
+    signal,
+  });
   if (!res.ok) {
     const errorJson: GetProductsErrorResponse = await res.json().catch(
       (): GetProductsErrorResponse => ({
