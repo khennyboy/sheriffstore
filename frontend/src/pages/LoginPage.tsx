@@ -13,8 +13,8 @@ import FloatingInput from "../component/FloatingInput";
 
 const LoginPage = () => {
   const [credentials, setCredentials] = useState({
-    username: "",
-    password: "",
+    username: "sheriff",
+    password: "khenny2020@",
   });
   const { login, isLoading } = useLogin();
   const pageBg = useColorModeValue("gray.50", "gray.950");
