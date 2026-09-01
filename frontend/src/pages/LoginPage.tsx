@@ -80,7 +80,7 @@ const LoginPage = () => {
               name="username"
               value={credentials.username}
               onChange={(e) =>
-                setCredentials({ ...credentials, username: e.target.value })
+                setCredentials({ ...credentials, username: e.target.value.trim() })
               }
             />
             <FloatingInput
@@ -89,7 +89,7 @@ const LoginPage = () => {
               name="password"
               value={credentials.password}
               onChange={(e) =>
-                setCredentials({ ...credentials, password: e.target.value })
+                setCredentials({ ...credentials, password: e.target.value.trim() })
               }
             />
             <Button
