@@ -16,7 +16,6 @@ const useAddProduct = () => {
         mutationFn: async (newProduct) => {
             const res = await fetch("/api/products", {
                 method: "POST",
-                // credentials: 'include',
                 headers: {
                     "Content-Type": "application/json",
                 },

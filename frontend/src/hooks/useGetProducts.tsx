@@ -8,7 +8,6 @@ import type {
 
 const fetchProducts = async (page: number, signal?: AbortSignal) => {
   const res = await fetch(`/api/products?page=${page}`, {
-    credentials: "include",
     signal,
   });
   if (!res.ok) {

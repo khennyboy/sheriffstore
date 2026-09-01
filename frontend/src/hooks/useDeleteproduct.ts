@@ -31,7 +31,7 @@ const useDeleteProduct = () => {
         DeleteContext // delete context parameter
     >({
         mutationFn: async (id) => {
-            const res = await fetch(`/api/products/${id}`, { method: "DELETE", credentials: 'include' });
+            const res = await fetch(`/api/products/${id}`, { method: "DELETE", });
             if (!res.ok) {
                 const errorJson: OtherProductResponse = await res.json().catch(
                     // Explicitly typing the return of the catch callback forces TS to validate it
