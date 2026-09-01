@@ -35,7 +35,8 @@ const LoginPage = () => {
       display={"flex"}
       alignItems={"center"}
       justifyContent={"center"}
-      p={4}
+      py={6}
+      px={4}
     >
       <Container maxW={"480px"}>
         <VStack gap={1} mb={6}>
