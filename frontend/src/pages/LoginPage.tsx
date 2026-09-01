@@ -37,7 +37,7 @@ const LoginPage = () => {
       justifyContent={"center"}
       p={4}
     >
-      <Container maxW={"400px"}>
+      <Container maxW={"480px"}>
         <VStack gap={1} mb={6}>
           <Box
             w={10}
