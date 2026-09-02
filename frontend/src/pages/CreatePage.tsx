@@ -15,7 +15,7 @@ const CreatePage = () => {
         <Box mb={8}>
           <Heading
             as={"h1"}
-            fontSize={"2xl"}
+            fontSize={{base:"1xl", md:"2xl"}}
             fontWeight={"extrabold"}
             color={headingColor}
             letterSpacing={"tight"}
@@ -32,8 +32,8 @@ const CreatePage = () => {
           border={"1px solid"}
           borderColor={cardBorder}
           rounded={"2xl"}
-          py={6}
-          px={3}
+          py={10}
+          px={4}
         >
           <ProductForm submitLabel="Add Product" />
         </Box>

@@ -7,7 +7,6 @@ import type { FloatingInputProps } from "../utils/types";
 const FloatingInput = ({
   label,
   error,
-  w,
   type,
   ...props
 }: FloatingInputProps) => {
@@ -19,12 +18,11 @@ const FloatingInput = ({
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <Box w={w ?? "full"}>
+    <Box>
       <Box position="relative" h="52px" w="full">
         <Input
           {...props}
           type={isPassword ? (showPassword ? "text" : "password") : type}
-          w="full"
           placeholder=" "
           bg={inputBg}
           color={inputColor}

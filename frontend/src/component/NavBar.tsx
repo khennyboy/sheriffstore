@@ -25,7 +25,7 @@ const NavBar = () => {
       <Container maxW={"1140px"} py={3}>
         <Flex alignItems={"center"} justifyContent={"space-between"}>
           <Link to={"/"}>
-            <HStack gap={2}>
+            <HStack>
               <Box
                 w={8}
                 h={8}
@@ -41,19 +41,25 @@ const NavBar = () => {
                 P
               </Box>
               <Text
-                fontSize={"lg"}
+                fontSize={{ base: "sm", md: "xl" }}
                 fontWeight={"bold"}
+                lineHeight={"shorter"}
                 letterSpacing={"tight"}
                 color={useColorModeValue("gray.900", "white")}
               >
-                Product Store
+                Product <Box as="br" display={{ base: "block", md: "none" }} />
+                Store
               </Text>
             </HStack>
           </Link>
 
-          <HStack gap={2}>
+          <HStack>
             <Link to={"/create"}>
-              <Button colorPalette="purple" rounded={"lg"} size={"sm"}>
+              <Button
+                colorPalette="purple"
+                rounded={"lg"}
+                size={{ base: "xs", md: "sm" }}
+              >
                 <LuPlus size={16} />
                 <Text display={{ base: "none", sm: "block" }}>New Product</Text>
               </Button>
@@ -62,7 +68,7 @@ const NavBar = () => {
               onClick={toggleColorMode}
               variant={"ghost"}
               rounded={"lg"}
-              size={"sm"}
+              size={{ base: "xs", md: "sm" }}
             >
               {colorMode === "light" ? <FaRegMoon /> : <MdOutlineWbSunny />}
             </Button>
@@ -71,7 +77,7 @@ const NavBar = () => {
               loading={isLoggingOut}
               variant={"ghost"}
               rounded={"lg"}
-              size={"sm"}
+              size={{ base: "xs", md: "sm" }}
               colorPalette={"red"}
             >
               <LuLogOut size={16} />

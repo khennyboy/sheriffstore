@@ -35,11 +35,9 @@ const LoginPage = () => {
       display={"flex"}
       alignItems={"center"}
       justifyContent={"center"}
-      py={6}
-      px={4}
     >
       <Container maxW={"480px"}>
-        <VStack gap={1} mb={6}>
+        <VStack gap={2} mb={6}>
           <Box
             w={10}
             h={10}
@@ -70,7 +68,8 @@ const LoginPage = () => {
           border={"1px solid"}
           borderColor={cardBorder}
           rounded={"2xl"}
-          p={6}
+          py={10}
+          px={4}
           w="full"
         >
           <VStack gap={2} align={"stretch"}>
@@ -80,7 +79,10 @@ const LoginPage = () => {
               name="username"
               value={credentials.username}
               onChange={(e) =>
-                setCredentials({ ...credentials, username: e.target.value.trim() })
+                setCredentials({
+                  ...credentials,
+                  username: e.target.value.trim(),
+                })
               }
             />
             <FloatingInput
@@ -89,7 +91,10 @@ const LoginPage = () => {
               name="password"
               value={credentials.password}
               onChange={(e) =>
-                setCredentials({ ...credentials, password: e.target.value.trim() })
+                setCredentials({
+                  ...credentials,
+                  password: e.target.value.trim(),
+                })
               }
             />
             <Button

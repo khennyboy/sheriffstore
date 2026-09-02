@@ -16,7 +16,7 @@ const UpdateDialog = () => {
       <Dialog.Backdrop />
       <Dialog.Positioner p={4}>
         <Dialog.Content rounded={"2xl"} w={"full"} maxW={"420px"}>
-          <Dialog.Header px={5} pt={5}>
+          <Dialog.Header>
             <Dialog.Title fontSize={"lg"} fontWeight={"bold"}>
               Update Product
             </Dialog.Title>
@@ -31,7 +31,7 @@ const UpdateDialog = () => {
             />
           </Dialog.CloseTrigger>
 
-          <Dialog.Body px={3} pb={5}>
+          <Dialog.Body px={4}>
             <ProductForm
               initialValues={selectedProduct ?? undefined}
               submitLabel="Save Changes"
