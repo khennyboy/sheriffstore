@@ -64,6 +64,7 @@ const NavBar = () => {
                 <Text display={{ base: "none", sm: "block" }}>New Product</Text>
               </Button>
             </Link>
+
             <Button
               onClick={toggleColorMode}
               variant={"ghost"}

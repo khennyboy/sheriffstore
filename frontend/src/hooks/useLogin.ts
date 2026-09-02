@@ -1,17 +1,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { toaster } from "../components/ui/toaster";
+import toast from "../utils/toast";
 
 const loginFn = async (credentials: { username: string; password: string }) => {
   const res = await fetch("/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    credentials: "include",
     body: JSON.stringify(credentials),
   });
 
+  if (!res.ok) {
+    const errorJson = await res.json().catch(
+      () => ({
+        success: false,
+        message: "An unknown network error occurred.",
+      }),
+    );
+    throw new Error(errorJson.message);
+  }
   const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Login failed");
   return data;
 };
 
@@ -26,13 +33,7 @@ const useLogin = () => {
       navigate("/");
     },
     onError: (error: Error) => {
-      toaster.create({
-        title: "Error",
-        description: error.message,
-        type: "error",
-        duration: 3000,
-        closable: true,
-      });
+      toast(false, error.message)
     },
   });
 

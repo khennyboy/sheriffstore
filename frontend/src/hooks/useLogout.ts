@@ -1,12 +1,22 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import toast from "../utils/toast";
 
 const logoutFn = async () => {
   const res = await fetch("/api/auth/logout", {
     method: "POST",
-    credentials: "include",
   });
-  if (!res.ok) throw new Error("Logout failed");
+  if (!res.ok) {
+    const errorJson = await res.json().catch(
+      () => ({
+        success: false,
+        message: "An unknown network error occurred.",
+      }),
+    );
+    throw new Error(errorJson.message);
+  }
+  const data = await res.json();
+  return data;
 };
 
 const useLogout = () => {
@@ -15,9 +25,13 @@ const useLogout = () => {
 
   const mutation = useMutation({
     mutationFn: logoutFn,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      toast(true, data.message)
       queryClient.setQueryData(["auth"], false);
       navigate("/login");
+    },
+    onError: (error: Error) => {
+      toast(false, error.message)
     },
   });
 
