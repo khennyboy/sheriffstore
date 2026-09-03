@@ -3,12 +3,11 @@ import type { InputProps } from "@chakra-ui/react";
 
 export interface Product {
   name: string;
-  price: string;
+  price: number ;
   image: string;
 }
 
 export type ProductFormProps = {
-  initialValues?: Product;
   submitLabel?: string;
 };
 

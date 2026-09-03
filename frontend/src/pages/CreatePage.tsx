@@ -1,6 +1,6 @@
 import { Box, Container, Heading, Text } from "@chakra-ui/react";
-import ProductForm from "../component/ProductForm";
 import { useColorModeValue } from "../components/ui/color-mode";
+import ProductForm from "../component/ProductForm";
 
 const CreatePage = () => {
   const pageBg = useColorModeValue("gray.50", "gray.950");

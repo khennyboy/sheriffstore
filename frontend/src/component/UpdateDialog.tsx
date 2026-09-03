@@ -1,11 +1,16 @@
 import { CloseButton, Dialog } from "@chakra-ui/react";
 import { useProductStore } from "../store/product-store";
+import { useShallow } from "zustand/react/shallow";
 import ProductForm from "./ProductForm";
 
 const UpdateDialog = () => {
-  const updateDialog = useProductStore((state) => state.updateDialog);
-  const setUpdateDialog = useProductStore((state) => state.setUpdateDialog);
-  const selectedProduct = useProductStore((state) => state.selectedProduct);
+  const { updateDialog, setUpdateDialog} = useProductStore(
+    useShallow((state) => ({
+      updateDialog: state.updateDialog,
+      setUpdateDialog: state.setUpdateDialog,
+      // selectedProduct: state.selectedProduct,
+    })),
+  );
 
   return (
     <Dialog.Root
@@ -33,7 +38,6 @@ const UpdateDialog = () => {
 
           <Dialog.Body px={4}>
             <ProductForm
-              initialValues={selectedProduct ?? undefined}
               submitLabel="Save Changes"
             />
           </Dialog.Body>

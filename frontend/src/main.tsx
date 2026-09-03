@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import "../src/index.css";
+import "./index.css";
 import App from "./App.tsx";
 import ScrollToTop from "./component/ScrolltoTop.tsx";
 import { Provider } from "./components/ui/provider.tsx";

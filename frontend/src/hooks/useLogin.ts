@@ -8,12 +8,12 @@ const loginFn = async (credentials: { username: string; password: string }) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credentials),
   });
-
+  console.log(res)
   if (!res.ok) {
     const errorJson = await res.json().catch(
       () => ({
         success: false,
-        message: "An unknown network error occurred.",
+        message: "An unknown network error occurred",
       }),
     );
     throw new Error(errorJson.message);

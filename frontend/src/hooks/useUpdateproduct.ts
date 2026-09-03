@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
-import { useProductStore } from "../store/product-store";
 import toast from "../utils/toast";
 import type { OtherProductResponse, Product, ProductDetail } from "../utils/types";
 
@@ -18,10 +17,6 @@ const useUpdateProduct = () => {
     const queryClient = useQueryClient();
     const [searchParams] = useSearchParams();
     const page = Number(searchParams.get("page")) || 1;
-
-    const setProducts = useProductStore((state) => state.setProducts);
-    const setUpdateDialog = useProductStore((state) => state.setUpdateDialog);
-    const setSelectedProduct = useProductStore((state) => state.setSelectedProduct);
 
     const { mutate, isPending, isSuccess } = useMutation<
         OtherProductResponse,
@@ -51,24 +46,7 @@ const useUpdateProduct = () => {
             const json = await res.json();
             return json;
         },
-        onMutate: async ({ id, product }) => {
-            const { products, selectedProduct } = useProductStore.getState();
-
-            setUpdateDialog(false);
-
-            // instantly reflect the edit in the list, no waiting on refetch
-            setProducts(
-                products.map((p) => (p._id === id ? { ...p, ...product } : p)),
-            );
-
-            return { products, selectedProduct }; // snapshot for rollback
-        },
-        onError: (err, _variables, context) => {
-            if (context) {
-                setProducts(context.products);
-                setSelectedProduct(context.selectedProduct);
-                setUpdateDialog(true); // reopen with the original data restored
-            }
+        onError: (err,) => {
             toast(false, err.message);
         },
         onSuccess: () => {

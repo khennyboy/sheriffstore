@@ -8,37 +8,27 @@ import { useProductStore } from "../store/product-store";
 import type { Product, ProductFormProps } from "../utils/types";
 import FloatingInput from "./FloatingInput";
 import { useShallow } from "zustand/react/shallow";
-
-const productSchema = z.object({
-  name: z.string().trim().min(1, "Product name is required"),
-  price: z
-    .string()
-    .trim()
-    .min(1, "Price is required")
-    .refine((val) => !isNaN(Number(val)), "Price must be a number")
-    .refine((val) => Number(val) > 0, "Price must be greater than 0"),
-  image: z.string().trim().url("Enter a valid image URL"),
-});
+import { productSchema } from "../utils/schema";
 
 type ProductFormValues = z.infer<typeof productSchema>;
 
-const emptyProduct: Product = {
-  name: "",
-  price: "",
-  image: "",
-};
+// the begining of the function
+const ProductForm = ({ submitLabel = "Save" }: ProductFormProps) => {
+  const { selectedProduct, setProducts, products, setUpdateDialog } =
+    useProductStore(
+      useShallow((state) => ({
+        selectedProduct: state.selectedProduct,
+        setProducts: state.setProducts, // still needed for the ADD path below
+        products: state.products, // still needed for the ADD path below
+        setUpdateDialog: state.setUpdateDialog,
+      })),
+    );
 
-const ProductForm = ({
-  initialValues = emptyProduct,
-  submitLabel = "Save",
-}: ProductFormProps) => {
-  const { selectedProduct, setProducts, products } = useProductStore(
-    useShallow((state) => ({
-      selectedProduct: state.selectedProduct,
-      setProducts: state.setProducts, // still needed for the ADD path below
-      products: state.products, // still needed for the ADD path below
-    })),
-  );
+  const initialValues: Product = {
+    name: selectedProduct?.name || "",
+    price: selectedProduct?.price ?? (undefined as unknown as number),
+    image: selectedProduct?.image || "",
+  };
 
   const { updateProduct, isUpdating } = useUpdateProduct();
   const { addProduct, isAdding } = useAddProduct();
@@ -55,24 +45,31 @@ const ProductForm = ({
     mode: "onChange",
     defaultValues: initialValues,
   });
-  // true if any field's value has changed from its defaultValues
-  const isUnchanged = !!selectedProduct && !isDirty;
-
   const onSubmit = (values: ProductFormValues) => {
     const product: Product = {
       name: values.name,
       price: values.price,
       image: values.image,
     };
-
+    console.log(product);
     if (selectedProduct) {
       const id = selectedProduct._id;
-      updateProduct({ id, product });
+      updateProduct(
+        { id, product },
+        {
+          onSuccess: () => {
+            setProducts(
+              products.map((p) => (p._id === id ? { ...p, ...product } : p)),
+            );
+            setUpdateDialog(false);
+          },
+        },
+      );
     } else {
       addProduct(product, {
         onSuccess: (data) => {
           if (data) setProducts([...products, data]);
-          reset(emptyProduct);
+          reset(initialValues);
         },
       });
     }
@@ -107,8 +104,11 @@ const ProductForm = ({
             label="Price"
             type="number"
             name="price"
-            value={field.value}
-            onChange={field.onChange}
+            value={field.value === 0 || !field.value ? undefined : field.value}
+            onChange={(e) => {
+              const val = e.target.value;
+              field.onChange(Number(val));
+            }}
             error={errors.price?.message}
           />
         )}
@@ -132,7 +132,7 @@ const ProductForm = ({
         type="submit"
         loading={isLoading}
         loadingText="Saving..."
-        disabled={isLoading || isUnchanged || !isValid}
+        disabled={isLoading || !isDirty || !isValid}
         h={"52px"}
         rounded={"xl"}
         colorPalette={"purple"}
