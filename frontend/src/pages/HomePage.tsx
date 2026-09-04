@@ -88,7 +88,7 @@ const HomePage = () => {
           </Heading>
           <Text color={subTextColor} fontSize={"md"}>
             {isLoading
-              ? "Loading your catalog…"
+              ? "Loading your products…"
               : `${totalProducts} product${products.length === 1 ? "" : "s"} in your store`}
           </Text>
           <Text color={subTextColor} fontSize={"sm"}>

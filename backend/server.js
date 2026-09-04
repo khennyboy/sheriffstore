@@ -5,7 +5,7 @@ import { connectDB } from "./config/db.js";
 import productRoutes from "./routes/products.route.js";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route.js";
-import { protectRoute } from "./middleware/protected-route.js";
+import { protectRoute } from "./middleware/protected.route.js";
 
 dotenv.config();
 
