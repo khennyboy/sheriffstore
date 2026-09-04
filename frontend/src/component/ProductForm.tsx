@@ -18,8 +18,8 @@ const ProductForm = ({ submitLabel = "Save" }: ProductFormProps) => {
     useProductStore(
       useShallow((state) => ({
         selectedProduct: state.selectedProduct,
-        setProducts: state.setProducts, // still needed for the ADD path below
-        products: state.products, // still needed for the ADD path below
+        setProducts: state.setProducts,
+        products: state.products,
         setUpdateDialog: state.setUpdateDialog,
       })),
     );

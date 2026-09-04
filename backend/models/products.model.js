@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
 
+const capitalize = (str) =>
+  str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
 const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
+      set: capitalize,
     },
     price: {
       type: Number,
@@ -17,7 +21,7 @@ const productSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, 
+    timestamps: true,
   },
 );
 
