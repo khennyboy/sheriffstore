@@ -20,7 +20,6 @@ export const getProducts = async (req, res) => {
       pageSize: limit,
     });
   } catch (error) {
-    console.error("Error getting products:", error.message);
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
@@ -38,7 +37,19 @@ export const createProduct = async (req, res) => {
     await newProduct.save();
     return res.status(201).json({ success: true, data: newProduct });
   } catch (error) {
-    console.log("Error saving product:", error.message);
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "A product with this name already exists.",
+      });
+    }
+    if (error.name === "CastError") {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid value for field '${error.path}'.`,
+      });
+    }
+
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
@@ -60,7 +71,19 @@ export const updateProduct = async (req, res) => {
       .status(200)
       .json({ success: true, message: "updated successfully" });
   } catch (error) {
-    console.log("Error Updating Product:", error.message);
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "A product with this name already exists.",
+      });
+    }
+    if (error.name === "CastError") {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid value for field '${error.path}'.`,
+      });
+    }
+
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
@@ -78,7 +101,6 @@ export const deleteProduct = async (req, res) => {
     await Product.findByIdAndDelete(id);
     return res.status(200).json({ success: true, message: "Product deleted" });
   } catch (error) {
-    console.error("Error Deleting products:", error.message);
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };

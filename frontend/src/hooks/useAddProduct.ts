@@ -14,7 +14,7 @@ const useAddProduct = () => {
         Product // TVariables — what you pass into mutate()
     >({
         mutationFn: async (newProduct) => {
-            const res = await fetch("/api/products", {
+            const res = await fetch("/products", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -9,9 +9,12 @@ export default defineConfig({
   server: {
     port: 8001,
     proxy: {
-      "/api": {
+      "/auth": {
         target: "http://localhost:8000"
-      }
-    }
+      },
+      "/products": {
+        target: "http://localhost:8000",
+      },
+    },
   },
 })

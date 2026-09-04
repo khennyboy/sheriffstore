@@ -3,9 +3,16 @@ import type { InputProps } from "@chakra-ui/react";
 
 export interface Product {
   name: string;
-  price: number ;
+  price: number;
   image: string;
 }
+
+export type ProductDetail = Product & {
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
 
 export type ProductFormProps = {
   submitLabel?: string;
@@ -16,12 +23,7 @@ export type FloatingInputProps = InputProps & {
   error?: string
 };
 
-export type ProductDetail = Product & {
-  _id: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-};
+
 
 // handles pagination data type
 export type Pagination = {
@@ -32,7 +34,7 @@ export type Pagination = {
   hasPrevPage: boolean;
 };
 
-// for GET /api/products — returns a LIST
+// for GET /products — returns a LIST
 export type GetProductsSuccessResponse = {
   success: true;
   data: ProductDetail[];
@@ -46,7 +48,7 @@ export type GetProductsErrorResponse = {
 };
 
 
-// for POST /api/products 
+// for POST /products 
 export type CreateProductErrorResponse = {
   success: false;
   message: string;

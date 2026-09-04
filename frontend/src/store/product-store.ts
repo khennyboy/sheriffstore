@@ -16,7 +16,7 @@ export const useProductStore = create<ProductStore>((set) => ({
   pageSize: 0,
   setCounts: (totalProducts, pageSize) => set({ totalProducts, pageSize }),
 
-  selectedProduct: null ,
+  selectedProduct: null,
   setSelectedProduct: (product) => set({ selectedProduct: product }),
 
   deleteDialog: false,
