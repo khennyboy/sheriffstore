@@ -13,7 +13,7 @@ const useAddProduct = () => {
         Error,  // TError
         Product // TVariables — what you pass into mutate()
     >({
-        mutationFn: async (newProduct) => {
+        mutationFn: async (newProduct,) => {
             const res = await fetch("/products", {
                 method: "POST",
                 headers: {
