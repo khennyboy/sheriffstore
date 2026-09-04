@@ -19,7 +19,7 @@ import useGetProducts from "../hooks/useGetProducts";
 import Productpagination from "../component/Productpagination";
 import { useProductStore } from "../store/product-store";
 import { useShallow } from "zustand/react/shallow";
-import { computePagination } from "../utils/pagination";
+import { computePagination } from "../utils/compute-pagination";
 
 const HomePage = () => {
   const subTextColor = useColorModeValue("gray.500", "gray.400");
