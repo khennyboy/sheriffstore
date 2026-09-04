@@ -42,7 +42,8 @@ const ProductForm = ({ submitLabel = "Save" }: ProductFormProps) => {
     formState: { errors, isDirty, isValid },
   } = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
-    mode: "onChange",
+    mode: "onTouched",
+    reValidateMode: "onChange",
     defaultValues: initialValues,
   });
   const onSubmit = (values: ProductFormValues) => {
