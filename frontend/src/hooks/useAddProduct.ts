@@ -44,8 +44,8 @@ const useAddProduct = () => {
             return json.data;
         },
         onSuccess: () => {
-            toast(true, "Product created successfully");
             queryClient.invalidateQueries({ queryKey: ["products"] });
+            toast(true, "Product created successfully");
             navigate("/");
         },
         onError: (err) => {
