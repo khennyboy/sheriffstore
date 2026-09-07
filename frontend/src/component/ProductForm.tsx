@@ -8,7 +8,8 @@ import type { Product, ProductFormProps } from "../utils/types";
 import FloatingInput from "./FloatingInput";
 import { useShallow } from "zustand/react/shallow";
 import { productSchema } from "../utils/schema";
-import useUpdateProduct from "../hooks/useUpdateProduct";
+import useUpdateProduct from "../hooks/useUpdateproduct";
+
 
 type ProductFormValues = z.infer<typeof productSchema>;
 
