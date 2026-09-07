@@ -10,20 +10,15 @@ import { useShallow } from "zustand/react/shallow";
 import { productSchema } from "../utils/schema";
 import useUpdateProduct from "../hooks/useUpdateproduct";
 
-
 type ProductFormValues = z.infer<typeof productSchema>;
 
-// the begining of the function
 const ProductForm = ({ submitLabel = "Save" }: ProductFormProps) => {
-  const { selectedProduct, setProducts, products, setUpdateDialog } =
-    useProductStore(
-      useShallow((state) => ({
-        selectedProduct: state.selectedProduct,
-        setProducts: state.setProducts,
-        products: state.products,
-        setUpdateDialog: state.setUpdateDialog,
-      })),
-    );
+  const { selectedProduct, setUpdateDialog } = useProductStore(
+    useShallow((state) => ({
+      selectedProduct: state.selectedProduct,
+      setUpdateDialog: state.setUpdateDialog,
+    })),
+  );
 
   const initialValues: Product = {
     name: selectedProduct?.name || "",
@@ -47,32 +42,24 @@ const ProductForm = ({ submitLabel = "Save" }: ProductFormProps) => {
     reValidateMode: "onChange",
     defaultValues: initialValues,
   });
+
   const onSubmit = (values: ProductFormValues) => {
     const product: Product = {
       name: values.name,
       price: values.price,
       image: values.image,
     };
-    console.log(product);
+
     if (selectedProduct) {
-      const id = selectedProduct._id;
       updateProduct(
-        { id, product },
+        { id: selectedProduct._id, product },
         {
-          onSuccess: () => {
-            setProducts(
-              products.map((p) => (p._id === id ? { ...p, ...product } : p)),
-            );
-            setUpdateDialog(false);
-          },
+          onSuccess: () => setUpdateDialog(false),
         },
       );
     } else {
       addProduct(product, {
-        onSuccess: (data) => {
-          if (data) setProducts([...products, data]);
-          reset(initialValues);
-        },
+        onSuccess: () => reset(initialValues),
       });
     }
   };

@@ -1,14 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import toast from "../utils/toast";
-import type { OtherProductResponse, Product } from "../utils/types";
+import type {
+    GetProductsSuccessResponse,
+    OtherProductResponse,
+    Product,
+} from "../utils/types";
 
 type UpdateParameter = {
     product: Product;
     id: string;
 };
-
-
 
 const useUpdateProduct = () => {
     const queryClient = useQueryClient();
@@ -34,20 +36,32 @@ const useUpdateProduct = () => {
                     (): OtherProductResponse => ({
                         success: false,
                         message: "An unknown network error occurred.",
-                    })
+                    }),
                 );
-                throw new Error(errorJson.message)
+                throw new Error(errorJson.message);
             }
 
-            const json = await res.json();
-            return json;
+            return res.json();
         },
-        onError: (err,) => {
+        onError: (err) => {
             toast(false, err.message);
         },
-        onSuccess: () => {
+        onSuccess: (_, { id, product }) => {
             toast(true, "Product updated successfully");
-            queryClient.invalidateQueries({ queryKey: ["products", page] });
+
+            // Directly update the React Query cache using submitted variables
+            queryClient.setQueryData<GetProductsSuccessResponse>(
+                ["products", page],
+                (old) => {
+                    if (!old) return old;
+                    return {
+                        ...old,
+                        data: old.data.map((p) =>
+                            p._id === id ? { ...p, ...product, updatedAt: new Date().toISOString() } : p
+                        ),
+                    };
+                }
+            );
         },
     });
 
