@@ -3,12 +3,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import useAddProduct from "../hooks/useAddProduct";
-import useUpdateProduct from "../hooks/useUpdateproduct";
 import { useProductStore } from "../store/product-store";
 import type { Product, ProductFormProps } from "../utils/types";
 import FloatingInput from "./FloatingInput";
 import { useShallow } from "zustand/react/shallow";
 import { productSchema } from "../utils/schema";
+import useUpdateProduct from "../hooks/useUpdateProduct";
 
 type ProductFormValues = z.infer<typeof productSchema>;
 

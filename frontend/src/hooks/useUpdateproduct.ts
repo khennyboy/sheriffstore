@@ -1,17 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import toast from "../utils/toast";
-import type { OtherProductResponse, Product, ProductDetail } from "../utils/types";
+import type { OtherProductResponse, Product } from "../utils/types";
 
 type UpdateParameter = {
     product: Product;
     id: string;
 };
 
-type UpdateContext = {
-    products: ProductDetail[];
-    selectedProduct: ProductDetail | null;
-};
+
 
 const useUpdateProduct = () => {
     const queryClient = useQueryClient();
@@ -21,8 +18,7 @@ const useUpdateProduct = () => {
     const { mutate, isPending, isSuccess } = useMutation<
         OtherProductResponse,
         Error,
-        UpdateParameter,
-        UpdateContext
+        UpdateParameter
     >({
         mutationFn: async ({ id, product }) => {
             const res = await fetch(`/products/${id}`, {
