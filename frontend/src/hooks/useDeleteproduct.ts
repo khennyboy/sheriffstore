@@ -25,7 +25,7 @@ const useDeleteProduct = () => {
     );
 
     const { mutate, isPending } = useMutation<
-        OtherProductResponse, // type of data returned
+        OtherProductResponse,
         Error,
         string,
         DeleteContext // delete context parameter
